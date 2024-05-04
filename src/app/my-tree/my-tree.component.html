@@ -11,7 +11,25 @@
   (nzOnDragOver)="dragOver($event)"
   (nzOnDragLeave)="dragLeave($event)"
   (nzOnDragEnter)="dragEnter($event)"
+  (nzOnDrop)="drop($event)"
+  (nzOnDragEnd)="dragEnd($event)"
 ></nz-tree>
 
-<button (click)="addElement()">add svid</button>
-<button (click)="addElement()">add operator</button>
+<button (click)="addSvid()">add svid</button>
+<button (click)="addOperator()">add operator</button>
+
+<nz-tree
+  #myTree
+  id="mytree2"
+  [nzData]="nodes2"
+  nzDraggable
+  nzBlockNode
+  (nzOnDrop)="nzEvent($event)"
+  (nzOnDragEnd)="dropEnd($event)"
+  [nzBeforeDrop]="beforeDrop"
+  (nzOnDragOver)="dragOver($event)"
+  (nzOnDragLeave)="dragLeave($event)"
+  (nzOnDragEnter)="dragEnter($event)"
+  (nzOnDrop)="drop($event)"
+  (nzOnDragEnd)="dragEnd($event)"
+></nz-tree>

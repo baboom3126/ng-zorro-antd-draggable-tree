@@ -1,9 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { v4 } from 'uuid';
 
-import {
-  NzContextMenuService,
-  NzDropdownMenuComponent,
-} from 'ng-zorro-antd/dropdown';
+import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import {
   NzFormatBeforeDropEvent,
   NzFormatEmitEvent,
@@ -24,11 +22,23 @@ export class MyTreeComponent implements OnInit {
   constructor(private nzContextMenuService: NzContextMenuService) {}
   ngOnInit() {}
   counter = 0;
-  addElement() {
+  addOperator() {
+    this.nodes[0].children?.push({
+      title: 'And' + this.counter,
+      key: v4(),
+      type: 'operator',
+      data: '{}',
+      isLeaf: false,
+      children: [],
+    });
+    this.counter = this.counter + 1;
+    this.nodes = [...this.nodes];
+  }
+  addSvid() {
     console.log(123123);
     this.nodes[0].children?.push({
       title: 'svid ' + this.counter,
-      key: new Date().getMilliseconds().toString(),
+      key: v4(),
       type: 'svid',
       data: '{}',
       isLeaf: true,
@@ -50,7 +60,18 @@ export class MyTreeComponent implements OnInit {
           type: '',
           data: '',
           expanded: true,
-          children: [{ title: '0-0-0-0', key: '0000', type: '', data: '' }],
+          children: [
+            {
+              title: '0-0-0-0',
+              key: '0000',
+              type: '',
+              data: '',
+              expanded: true,
+              children: [
+                { title: '0-0-0-0-0', key: '00000', type: '', data: '' },
+              ],
+            },
+          ],
         },
         {
           title: '0-0-1',
@@ -63,7 +84,44 @@ export class MyTreeComponent implements OnInit {
       ],
     },
   ];
-
+  nodes2: NzTreeNodeOptions[] = [
+    {
+      title: 'root',
+      key: 'root',
+      type: 'root',
+      data: '',
+      expanded: true,
+      children: [
+        {
+          title: '0-0-0',
+          key: '000',
+          type: '',
+          data: '',
+          expanded: true,
+          children: [
+            {
+              title: '0-0-0-0',
+              key: '0000',
+              type: '',
+              data: '',
+              expanded: true,
+              children: [
+                { title: '0-0-0-0-0', key: '00000', type: '', data: '' },
+              ],
+            },
+          ],
+        },
+        {
+          title: '0-0-1',
+          key: '001',
+          expanded: true,
+          type: '',
+          data: '',
+          children: [{ title: '0-0-1-0', key: '0010', type: '', data: '' }],
+        },
+      ],
+    },
+  ];
   nzEvent(event: NzFormatEmitEvent): void {
     // console.log(event);
   }
@@ -102,15 +160,24 @@ export class MyTreeComponent implements OnInit {
   }
   dragOver(event: NzFormatEmitEvent): void {
     this.setElementStyle(event);
-    console.log(event);
+    // console.log(event);
 
     this.removeDropIndicator(event.event);
   }
-
+  drop(event: NzFormatEmitEvent): void {
+    console.log(`drop`);
+    console.log(event);
+  }
+  dragEnd(event: NzFormatEmitEvent): void {
+    console.log(`dragEnd`);
+    console.log(event);
+  }
   dragLeave(event: NzFormatEmitEvent): void {
     this.initElementStyle(event);
   }
-  dragEnter(event: NzFormatEmitEvent): void {}
+  dragEnter(event: NzFormatEmitEvent): void {
+    console.log(event);
+  }
   setElementStyle(event: NzTreeNode | any): void {
     event.event.target.setAttribute('style', 'color: white; background: red');
   }

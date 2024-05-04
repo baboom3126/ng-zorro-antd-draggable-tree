@@ -12,8 +12,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTreeComponent } from './my-tree/my-tree.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
-
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 registerLocaleData(zh);
 
 @NgModule({
@@ -24,7 +22,6 @@ registerLocaleData(zh);
     HttpClientModule,
     BrowserAnimationsModule,
     NzTreeModule,
-    NzDropDownModule,
     NzTreeViewModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_TW }],
