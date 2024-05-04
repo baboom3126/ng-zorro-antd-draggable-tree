@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { v4 } from 'uuid';
 
-import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import {
   NzFormatBeforeDropEvent,
   NzFormatEmitEvent,
@@ -19,7 +18,7 @@ import { Observable, of } from 'rxjs';
 export class MyTreeComponent implements OnInit {
   @ViewChild('myTree', { static: false }) myTree!: NzTreeComponent;
 
-  constructor(private nzContextMenuService: NzContextMenuService) {}
+  constructor() {}
   ngOnInit() {}
   counter = 0;
   addOperator() {
