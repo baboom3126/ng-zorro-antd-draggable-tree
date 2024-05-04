@@ -26,13 +26,19 @@ nz-tree {
   left: 12px;
 }
 
-.highlight {
-  font-size: large;
-  background-color: red;
-}
-::ng-deep .nz-tree-drop-indicator {
-  display: none !important;
-}
-.ant-tree-drop-indicator {
-  display: none !important;
+.ant-tree.ant-tree-block-node
+  .ant-tree-list-holder-inner
+  .ant-tree-treenode.dragging::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  border: 1px solid black !important;
+  opacity: 0;
+  animation: ant-tree-node-fx-do-not-use 0.3s;
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+  content: "";
+  pointer-events: none;
 }
