@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<nz-tree
+  #myTree
+  id="mytree1"
+  [nzData]="nodes"
+  nzDraggable
+  nzBlockNode
+  (nzOnDrop)="nzEvent($event)"
+  (nzOnDragEnd)="dropEnd($event)"
+  [nzBeforeDrop]="beforeDrop"
+  (nzOnDragOver)="dragOver($event)"
+  (nzOnDragLeave)="dragLeave($event)"
+  (nzOnDragEnter)="dragEnter($event)"
+></nz-tree>
+
+<button (click)="addElement()">add svid</button>
+<button (click)="addElement()">add operator</button>
