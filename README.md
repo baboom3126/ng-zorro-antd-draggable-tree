@@ -1,6 +1,6 @@
 # PROJECTNAME
 
-This project is an enhancement of `ng-zorro-antd` Tree component by custom drag and drop event for a more flexible scenario.
+This project is an enhancement of `ng-zorro-antd/tree` component by custom drag and drop event for a more flexible scenario.
 
 ## Start Project
 
