@@ -21,53 +21,61 @@ export class MyTreeComponent implements OnInit {
   constructor() {}
   ngOnInit() {}
   counter = 0;
-  addOperator() {
+  addParent() {
     this.nodes[0].children?.push({
       title: 'And' + this.counter,
       key: v4(),
-      type: 'operator',
+      type: 'parent',
       data: '{}',
       isLeaf: false,
+      expanded: true,
       children: [],
     });
     this.counter = this.counter + 1;
     this.nodes = [...this.nodes];
   }
-  addSvid() {
+  addChild() {
     console.log(123123);
     this.nodes[0].children?.push({
-      title: 'svid ' + this.counter,
+      title: 'child ' + this.counter,
       key: v4(),
-      type: 'svid',
+      type: 'child',
       data: '{}',
       isLeaf: true,
     });
     this.counter = this.counter + 1;
     this.nodes = [...this.nodes];
   }
+
   nodes: NzTreeNodeOptions[] = [
     {
       title: 'root',
       key: 'root',
-      type: 'root',
+      type: 'parent',
       data: '',
       expanded: true,
       children: [
         {
           title: '0-0-0',
           key: '000',
-          type: '',
+          type: 'parent',
           data: '',
           expanded: true,
           children: [
             {
               title: '0-0-0-0',
               key: '0000',
-              type: '',
+              type: 'parent',
               data: '',
               expanded: true,
               children: [
-                { title: '0-0-0-0-0', key: '00000', type: '', data: '' },
+                {
+                  title: '0-0-0-0-0',
+                  key: '00000',
+                  type: 'child',
+                  data: '',
+                  isLeaf: true,
+                },
               ],
             },
           ],
@@ -76,47 +84,17 @@ export class MyTreeComponent implements OnInit {
           title: '0-0-1',
           key: '001',
           expanded: true,
-          type: '',
+          type: 'parent',
           data: '',
-          children: [{ title: '0-0-1-0', key: '0010', type: '', data: '' }],
-        },
-      ],
-    },
-  ];
-  nodes2: NzTreeNodeOptions[] = [
-    {
-      title: 'root',
-      key: 'root',
-      type: 'root',
-      data: '',
-      expanded: true,
-      children: [
-        {
-          title: '0-0-0',
-          key: '000',
-          type: '',
-          data: '',
-          expanded: true,
           children: [
             {
-              title: '0-0-0-0',
-              key: '0000',
-              type: '',
+              title: '0-0-1-0',
+              key: '0010',
+              type: 'child',
               data: '',
-              expanded: true,
-              children: [
-                { title: '0-0-0-0-0', key: '00000', type: '', data: '' },
-              ],
+              isLeaf: true,
             },
           ],
-        },
-        {
-          title: '0-0-1',
-          key: '001',
-          expanded: true,
-          type: '',
-          data: '',
-          children: [{ title: '0-0-1-0', key: '0010', type: '', data: '' }],
         },
       ],
     },
@@ -131,21 +109,46 @@ export class MyTreeComponent implements OnInit {
     if (event.dragNode?.parentNode?.origin.key === event.node?.origin.key) {
       alert('same position');
     } else {
+      const targetNode = event.node;
       const targetChildren = event.node?.getChildren();
 
       if (targetChildren && event.dragNode) {
-        const tmpDragNode = { ...event.dragNode.origin };
-        event.dragNode.remove();
+        if (targetNode?.origin['type'] === 'parent') {
+          const tmpDragNode = { ...event.dragNode.origin };
+          event.dragNode.remove();
 
-        const tmp: NzTreeNodeOptions[] = [];
-        for (const b of targetChildren) {
-          tmp.push(b.origin);
+          const tmp: NzTreeNodeOptions[] = [];
+          for (const b of targetChildren) {
+            tmp.push(b.origin);
+          }
+          tmp.push(tmpDragNode);
+          event.node?.clearChildren();
+          event.node?.addChildren(tmp);
+
+          this.initElementStyle(event);
+        } else if (targetNode?.origin['type'] === 'child') {
+          const tmpDragNode = { ...event.dragNode.origin };
+          const tmp = [];
+          tmp.push(tmpDragNode);
+          tmp.push(event.node?.origin);
+
+          event.dragNode.remove();
+          event.node?.remove();
+
+          targetNode.parentNode?.addChildren([
+            {
+              title: 'And' + this.counter,
+              key: v4(),
+              type: 'parent',
+              data: '{}',
+              isLeaf: false,
+              children: tmp,
+              expanded: true,
+            },
+          ]);
+
+          this.initElementStyle(event);
         }
-        tmp.push(tmpDragNode);
-        event.node?.clearChildren();
-        event.node?.addChildren(tmp);
-
-        this.initElementStyle(event);
       }
     }
     this.nodes = [...this.nodes];
@@ -178,13 +181,16 @@ export class MyTreeComponent implements OnInit {
     console.log(event);
   }
   setElementStyle(event: NzTreeNode | any): void {
-    event.event.target.setAttribute('style', 'color: white; background: red');
+    event.event.currentTarget.setAttribute(
+      'style',
+      'color: white; background: red'
+    );
   }
   initElementStyle(event: NzFormatEmitEvent | any): void {
-    event.event.target.setAttribute('style', '');
+    event.event.currentTarget.setAttribute('style', '');
   }
   removeDropIndicator(event: NzFormatEmitEvent['event'] | any): void {
-    const children = event.target.children;
+    const children = event.currentTarget.children;
     if (children[1] && children[1].nodeName) {
       if (children[1].nodeName === 'NZ-TREE-DROP-INDICATOR') {
         children[1].setAttribute('style', 'display:none');
